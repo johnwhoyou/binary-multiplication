@@ -12,7 +12,12 @@ export function isValidDec(value) {
 	/* Regex that zero or one positive or negative sign, followed by zero or more digits */
 	const pattern = /^(-|\+)?(\d+)?$/;
 	if (!pattern.test(value)) {
-		return false;
+		const slicedVal = value.slice(0, -1);
+		if (pattern.test(slicedVal)) {
+			return true
+		} else {
+			return false;
+		}
 	}
 
 	/* Check if the value is within the range of 16-bit signed integers. */
