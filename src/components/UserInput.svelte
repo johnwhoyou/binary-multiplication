@@ -1,7 +1,7 @@
 <script>
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
-  import { toBinary } from '../lib/scripts/conversions';
-  import { decMultiplicand, binMultiplicand, decMultiplier, binMultiplier } from '../lib/store/Store';
+  import { toBinary, toDecimal } from '../lib/scripts/conversions';
+  import { multiplyDisabled, decMultiplicand, binMultiplicand, decMultiplier, binMultiplier } from '../lib/store/Store';
 
   /* Housekeeping */
   let decMultiplicandValid = false;
@@ -9,12 +9,16 @@
   let binMultiplicandValid = false;
   let binMultiplierValid = false;
 
-  $: multiplyDisabled = !( (decMultiplicandValid && decMultiplierValid) || (binMultiplicandValid && binMultiplierValid) 
+  function updateMultiplyDisabled() {
+    const disabled = !( (decMultiplicandValid && decMultiplierValid) || (binMultiplicandValid && binMultiplierValid)
                           || (decMultiplicandValid && binMultiplierValid) || (binMultiplicandValid && decMultiplierValid) );
-
+    multiplyDisabled.set(disabled);
+  }
+                        
   /* Decimal Input Validation */
   function validateDec(decimal, target) {
-    if (isValidDec(decimal)) {
+    let value = isValidDec(decimal);
+    if (value === true) {
       if (target === 'multiplicand') {
         decMultiplicand.set(decimal);
         decMultiplicandValid = true;
@@ -23,19 +27,24 @@
         decMultiplierValid = true;
       }
       decimalToBinary(decimal, target);
+    } else if (value === false) {
+        if (target === 'multiplicand') {
+          binMultiplicand.set('');
+          decMultiplicandValid = false;
+        } else {
+          binMultiplier.set('');
+          decMultiplierValid = false;
+        }
     } else {
-      if (target === 'multiplicand') {
-        decMultiplicandValid = false;
-      } else {
-        decMultiplierValid = false;
-      }
-      decimalToBinary(decimal, target);
+      validateDec(value, target);
     }
+    updateMultiplyDisabled();
   }
 
   /* Binary Input Validation */
   function validateBin(binary, target) {
-    if (isValidBin(binary)) {
+    let value = isValidBin(binary);
+    if (value === true) {
       if (target === 'multiplicand') {
         binMultiplicand.set(binary);
         binMultiplicandValid = true;
@@ -43,24 +52,32 @@
         binMultiplier.set(binary);
         binMultiplierValid = true;
       }
-      //binaryToDecimal(binary, target);
+      binaryToDecimal(binary,target);
+    } else if (value === false) {
+        if (target === 'multiplicand') {
+          decMultiplicand.set('');
+          binMultiplicandValid = false;
+        } else {
+          decMultiplier.set('');
+          binMultiplierValid = false;
+        }
     } else {
-      if (target === 'multiplicand') {
-      binMultiplicandValid = false;
-      } else {
-      binMultiplierValid = false;
-      }
-      //binaryToDecimal(binary, target);
+      validateBin(value, target);
+    }
+    updateMultiplyDisabled();
+  }
+
+  function decimalToBinary(decimal, target) {
+    if (decimal === '' || decimal === '+' || decimal === '-') {
+      target === 'multiplicand' ? binMultiplicand.set('') : binMultiplier.set('');
+    } else {
+      target === 'multiplicand' ? binMultiplicand.set(toBinary(decimal)) : binMultiplier.set(toBinary(decimal))
     }
   }
 
-  function decimalToBinary(decimal, target){
-    if (decimal === '') {
-      return target === 'multiplicand' ? binMultiplicand.set('') : binMultiplier.set('');
-    }
-    return target === 'multiplicand' ? binMultiplicand.set(toBinary(decimal)) : binMultiplier.set(toBinary(decimal))
+  function binaryToDecimal(binary, target) {
+      target === 'multiplicand' ? decMultiplicand.set(toDecimal(binary)) : decMultiplier.set(toDecimal(binary))
   }
-
 </script>
 
 <div class="flex flex-col w-full sm:flex-row justify-center items-center space-x-0 lg:space-x-4">
@@ -103,7 +120,7 @@
     </select>
   </div>
   <div class="pt-10">
-    <button class="btn btn-secondary" disabled={multiplyDisabled}>Multiply</button>
+    <button class="btn btn-secondary" disabled={$multiplyDisabled}>Multiply</button>
   </div>
 </div>
 

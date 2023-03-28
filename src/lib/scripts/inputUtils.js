@@ -6,7 +6,8 @@
  *
  * @param {string} value Decimal operand.
  * @returns {boolean} `true` if the decimal operand is valid and supported by the calculator (or if `value`
- * is either a positive or a negative sign); `false`, otherwise.
+ * is either a positive or a negative sign); `false`, otherwise. It also returns the sliced value if the pattern is
+ * found after slicing the last character.
  */
 export function isValidDec(value) {
 	/* Regex that zero or one positive or negative sign, followed by zero or more digits */
@@ -14,10 +15,9 @@ export function isValidDec(value) {
 	if (!pattern.test(value)) {
 		const slicedVal = value.slice(0, -1);
 		if (pattern.test(slicedVal)) {
-			return true
-		} else {
-			return false;
+			return slicedVal;
 		}
+		return false;
 	}
 
 	/* Check if the value is within the range of 16-bit signed integers. */
@@ -49,6 +49,10 @@ export function isValidBin(value) {
 	/* Regex that only accepts zero or more 0s or 1s */
 	const pattern = /^[0-1]*$/;
 	if (!pattern.test(value)) {
+		const slicedVal = value.slice(0, -1);
+		if (pattern.test(slicedVal)) {
+			return slicedVal;
+		}
 		return false;
 	}
 
