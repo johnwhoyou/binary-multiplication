@@ -9,6 +9,8 @@
     });
 </script>
   
+<div class="flex justify-center items-center">
 {#if visible}
     <img src="https://i.imgur.com/0QOMof6.png" alt="download" style="pointer-events: none;" transition:fly="{{ y: 200, duration: 2000 }}" />
-{/if}  
+{/if}
+</div>
