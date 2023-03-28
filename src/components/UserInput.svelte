@@ -1,13 +1,9 @@
 <script>
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
-  import { _10To2, _2To10 } from "simple-base-converter";
+  import { toBinary } from '../lib/scripts/conversions';
+  import { decMultiplicand, binMultiplicand, decMultiplier, binMultiplier } from '../lib/store/Store';
 
   /* Housekeeping */
-  let decMultiplicand = '';
-  let binMultiplicand = '';
-  let decMultiplier = '';
-  let binMultiplier = '';
-  
   let decMultiplicandValid = false;
   let decMultiplierValid = false;
   let binMultiplicandValid = false;
@@ -20,19 +16,20 @@
   function validateDec(decimal, target) {
     if (isValidDec(decimal)) {
       if (target === 'multiplicand') {
-        decMultiplicand = decimal;
+        decMultiplicand.set(decimal);
         decMultiplicandValid = true;
       } else {
-        decMultiplier = decimal;
+        decMultiplier.set(decimal);
         decMultiplierValid = true;
       }
-      //decimalToBinary(decimal, target);
+      decimalToBinary(decimal, target);
     } else {
       if (target === 'multiplicand') {
-      decMultiplicandValid = false;
+        decMultiplicandValid = false;
       } else {
-      decMultiplierValid = false;
+        decMultiplierValid = false;
       }
+      decimalToBinary(decimal, target);
     }
   }
 
@@ -40,10 +37,10 @@
   function validateBin(binary, target) {
     if (isValidBin(binary)) {
       if (target === 'multiplicand') {
-        binMultiplicand = binary;
+        binMultiplicand.set(binary);
         binMultiplicandValid = true;
       } else {
-        binMultiplier = binary;
+        binMultiplier.set(binary);
         binMultiplierValid = true;
       }
       //binaryToDecimal(binary, target);
@@ -53,19 +50,15 @@
       } else {
       binMultiplierValid = false;
       }
+      //binaryToDecimal(binary, target);
     }
   }
 
   function decimalToBinary(decimal, target){
-    return target === 'multiplicand' 
-      ? binMultiplicand = _10To2(decimal)
-      : binMultiplier = _10To2(decimal)
-  }
-  
-  function binaryToDecimal(binary, target){
-    return target === 'multiplicand' 
-      ? decMultiplicand = _2To10(parseInt(binary))
-      : decMultiplier = _2To10(parseInt(binary))
+    if (decimal === '') {
+      return target === 'multiplicand' ? binMultiplicand.set('') : binMultiplier.set('');
+    }
+    return target === 'multiplicand' ? binMultiplicand.set(toBinary(decimal)) : binMultiplier.set(toBinary(decimal))
   }
 
 </script>
@@ -76,8 +69,8 @@
           <span class="label-text">Multiplicand</span>
         </label>
         <div class="flex flex-col space-y-1">
-          <input type="text" placeholder="Decimal" class="input input-bordered input-primary w-full max-w-xs rounded-full" bind:value={decMultiplicand} on:input={() => validateDec(decMultiplicand,'multiplicand')} />
-          <input type="text" placeholder="Binary" class="input input-bordered input-primary w-full max-w-xs mb-4 rounded-full" bind:value={binMultiplicand} on:input={() => validateBin(binMultiplicand,'multiplicand')} />
+          <input type="text" placeholder="Decimal" class="input input-bordered input-primary w-full max-w-xs rounded-full" bind:value={$decMultiplicand} on:input={() => validateDec($decMultiplicand,'multiplicand')} />
+          <input type="text" placeholder="Binary" class="input input-bordered input-primary w-full max-w-xs mb-4 rounded-full" bind:value={$binMultiplicand} on:input={() => validateBin($binMultiplicand,'multiplicand')} />
         </div>
       </div>
     <div class="divider sm:divider-horizontal pt-9"></div>
@@ -86,8 +79,8 @@
           <span class="label-text">Multiplier</span>
         </label>
         <div class="flex flex-col space-y-1">
-          <input type="text" placeholder="Decimal" class="input input-bordered input-primary w-full max-w-xs rounded-full" bind:value={decMultiplier} on:input={() => validateDec(decMultiplier,'multiplier')} />
-          <input type="text" placeholder="Binary" class="input input-bordered input-primary w-full max-w-xs mb-4 rounded-full" bind:value={binMultiplier} on:input={() => validateBin(binMultiplier,'multiplier')} />
+          <input type="text" placeholder="Decimal" class="input input-bordered input-primary w-full max-w-xs rounded-full" bind:value={$decMultiplier} on:input={() => validateDec($decMultiplier,'multiplier')} />
+          <input type="text" placeholder="Binary" class="input input-bordered input-primary w-full max-w-xs mb-4 rounded-full" bind:value={$binMultiplier} on:input={() => validateBin($binMultiplier,'multiplier')} />
         </div>
       </div>
 </div>
