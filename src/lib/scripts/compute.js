@@ -1,6 +1,5 @@
 function binaryAddition(a,b){
     let result = "", carry = 0
-  
     while(a || b || carry){
         let sum = +a.slice(-1) + +b.slice(-1) + carry // get last digit from each number and sum 
         if( sum > 1 ){  
