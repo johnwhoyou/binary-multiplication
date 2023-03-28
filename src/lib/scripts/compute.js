@@ -1,3 +1,26 @@
+function binaryAddition(a,b){
+    let result = "", carry = 0
+  
+    while(a || b || carry){
+      let sum = +a.slice(-1) + +b.slice(-1) + carry // get last digit from each number and sum 
+  
+      if( sum > 1 ){  
+        result = sum%2 + result
+        carry = 1
+      }
+      else{
+        result = sum + result
+        carry = 0
+      }
+      
+      // trim last digit (110 -> 11)
+      a = a.slice(0, -1)
+      b = b.slice(0, -1)
+    }
+    
+    return result
+}
+
 /**
  * This function implements the pencil and paper approach to binary multiplication.
  * 
@@ -11,10 +34,16 @@ export function pencil_and_paper(multiplicand, multiplier){
     let steps = [];
     
     for(let i = multiplier.length - 1; i >= 0; i--){
-        if(multiplier[i] == "1"){ val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand }
-        else{ val = "0".repeat(ans_length) }
-        steps.push(val);
-        // TODO Add the 'val' to the answer
+        if(multiplier[i] == "1"){
+            let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat(multiplier.length - 1 - i);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
+            steps.push(val);
+        }else{
+            let val = "0".repeat(ans_length);
+            ans = binaryAddition(ans, val);
+            steps.push(val);
+        }
     }
 
     return {answer: ans, steps: steps}
@@ -53,4 +82,6 @@ export function sequential_circuit(multiplicand, multiplier){
 
 }
 
-console.log(pencil_and_paper("1010", "1010"));
+// Test Cases
+console.log('Test 1:\n', pencil_and_paper("01010", "101"));
+console.log('Test 2:\n', pencil_and_paper("01111", "0111"));
