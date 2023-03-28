@@ -2,6 +2,7 @@
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
   import { toBinary, toDecimal } from '../lib/scripts/conversions';
   import { multiplyDisabled, decMultiplicand, binMultiplicand, decMultiplier, binMultiplier } from '../lib/store/Store';
+  //import { pencil_and_paper } from '../lib/scripts/compute.js';
 
   /* Housekeeping */
   let decMultiplicandValid = false;
@@ -73,6 +74,9 @@
     } else {
       target === 'multiplicand' ? binMultiplicand.set(toBinary(decimal)) : binMultiplier.set(toBinary(decimal))
     }
+
+    //let test = pencil_and_paper($binMultiplicand, $binMultiplier);
+    //console.log(test);
   }
 
   function binaryToDecimal(binary, target) {
@@ -103,15 +107,8 @@
 </div>
 
 <div class="flex flex-col w-full sm:flex-row justify-center items-center space-x-0 lg:space-x-4">
-  <div class="pt-10">
-    <select class="select select-ghost w-full max-w-xs">
-      <option disabled selected>Solving Mode</option>
-      <option>Step by Step</option>
-      <option>Show All</option>
-    </select>
-  </div>
-  <div class="pt-10">
-    <select class="select select-ghost w-full max-w-xs">
+  <div class="pt-5">
+    <select class="select select-ghost w-full max-w-xs select-bordered w-50">
       <option disabled selected>Algorithm</option>
       <option>Pencil and Paper</option>
       <option>Booth's</option>
@@ -119,8 +116,15 @@
       <option>Sequential Circuit</option>
     </select>
   </div>
-  <div class="pt-10">
-    <button class="btn btn-secondary" disabled={$multiplyDisabled}>Multiply</button>
+  <div class="pt-5">
+    <select class="select select-ghost w-full max-w-xs select-bordered">
+      <option disabled selected>Solving Mode</option>
+      <option>Step by Step</option>
+      <option>Show All</option>
+    </select> 
+  </div>
+  <div class="pt-5">
+    <button class="btn btn-primary" disabled={$multiplyDisabled}>Multiply</button>
   </div>
 </div>
 
