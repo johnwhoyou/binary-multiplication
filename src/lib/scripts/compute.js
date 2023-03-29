@@ -57,11 +57,11 @@ export function pencil_and_paper(multiplicand, multiplier){
             val = val.slice(val.length - ans_length);
             ans = binaryAddition(ans, val);
             val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push({"value": val, "multiplier": "1"});
+            steps.push({"value": val, "multiplied_to": "1"});
         }else{
             let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
             ans = binaryAddition(ans, val);
-            steps.push({"value": val, "multiplier": "0"});
+            steps.push({"value": val, "multiplied_to": "0"});
         }
     }
 
@@ -69,11 +69,11 @@ export function pencil_and_paper(multiplicand, multiplier){
         let val = twos_complement(multiplicand) + "0".repeat(multiplier.length);
         ans = binaryAddition(ans, val);
         val = val.slice(0, val.length - multiplier.length);
-        steps.push({"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
+        steps.push({"value": val, "multiplied_to": "2\'s Complement"}); // insert at beginning
     }
 
     ans = ans.slice(ans.length - ans_length);
-    return {answer: ans, steps: steps}
+    return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: multiplier}
 }
 
 /**
@@ -118,24 +118,24 @@ export function booths_algorithm(multiplicand, multiplier){
             val = val.slice(val.length - ans_length);
             ans = binaryAddition(ans, val);
             val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push({"value": val, "multiplier": "+1"});
+            steps.push({"value": val, "multiplied_to": "+1"});
         }else if(multiplier[i] == "-1"){
             let temp = twos_complement(multiplicand)
             let val = temp[0].repeat(ans_length - multiplicand.length) + temp + "0".repeat(multiplier.length - 1 - i);
             val = val.slice(val.length - ans_length);
             ans = binaryAddition(ans, val);
             val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push({"value": val, "multiplier": "-1"});
+            steps.push({"value": val, "multiplied_to": "-1"});
         }
         else{
             let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
             ans = binaryAddition(ans, val);
-            steps.push({"value": val, "multiplier": "0"});
+            steps.push({"value": val, "multiplied_to": "0"});
         }
     }
 
     ans = ans.slice(ans.length - ans_length);
-    return {answer: ans, steps: steps}
+    return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: multiplier}
 }
 
 function convert_mutliplier_to_extended_booth(multiplier){
