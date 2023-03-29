@@ -138,6 +138,11 @@ export function booths_algorithm(multiplicand, multiplier){
     return {answer: ans, steps: steps}
 }
 
+function convert_mutliplier_to_extended_booth(multiplier){
+    const lookup = {'000': '0', '001': '+1', '010': '+1', '011': '+2', '100': '-2', '101': '-1', '110': '-1', '111': '0'};
+
+}
+
 /**
  * This function implements the extended Booth's algorithm for binary multiplication.
  * 
@@ -193,4 +198,9 @@ function booths_tests(){
     console.log('Booth\'s Algorithm Tests')
     console.log('Test 1: ', booths_algorithm("0100", "1011"), booths_algorithm("0100", "1011").answer === "11101100");
     console.log('Test 2: ', booths_algorithm("0100", "0101"), booths_algorithm("0100", "0101").answer === "00010100");
+}
+
+function extended_booths_tests(){
+    console.log('Extended Booth\'s Algorithm Tests')
+    console.log('Test 1: ', extended_booths_algorithm("01101", "00110"), extended_booths_algorithm("01101", "00110").answer = "0001001110");
 }
