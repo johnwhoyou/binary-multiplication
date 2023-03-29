@@ -55,11 +55,11 @@ export function pencil_and_paper(multiplicand, multiplier){
             val = val.slice(val.length - ans_length);
             ans = binaryAddition(ans, val);
             val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push(val);
+            steps.push({"value": val, "multiplier": "1"});
         }else{
             let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
             ans = binaryAddition(ans, val);
-            steps.push(val);
+            steps.push({"value": val, "multiplier": "0"});
         }
     }
 
@@ -68,12 +68,11 @@ export function pencil_and_paper(multiplicand, multiplier){
         let val = twos_complement(multiplicand) + "0".repeat(multiplier.length);
         ans = binaryAddition(ans, val);
         val = val.slice(0, val.length - multiplier.length);
-        steps.splice(0, 0, val); // insert at beginning
+        steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
     }
 
     return {answer: ans, steps: steps}
 }
-
 /**
  * Old implementation ng pencil and paper, use this if you want to see the steps in reverse order
  */
@@ -88,11 +87,11 @@ function old_pencil_and_paper(multiplicand, multiplier){
             val = val.slice(val.length - ans_length);
             ans = binaryAddition(ans, val);
             val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push(val);
+            steps.push({"value": val, "multiplier": "1"});
         }else{
             let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
             ans = binaryAddition(ans, val);
-            steps.push(val);
+            steps.push({"value": val, "multiplier": "0"});
         }
     }
 
@@ -100,10 +99,32 @@ function old_pencil_and_paper(multiplicand, multiplier){
         let val = twos_complement(multiplicand) + "0".repeat(multiplier.length);
         ans = binaryAddition(ans, val);
         val = val.slice(0, val.length - multiplier.length);
-        steps.splice(0, 0, val); // insert at beginning
+        steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
     }
 
     return {answer: ans, steps: steps}
+}
+
+/**
+ * This function converts the binary multiplier to the Booth's algorithm format.
+ * 
+ * @param {string} multiplier binary string
+ * @returns {Array} strings of +1, -1, or 0
+ */
+function convert_multiplier_to_booths(multiplier){
+    const multipliers = [];
+    let temp = multiplier.length % 2 ? multiplier : multiplier + "0" ;
+    for(let i = 0; i < temp.length - 1; i++){
+        let val = temp[i] + temp[i+1];
+        if(val === "01"){
+            multipliers.push("+1");
+        } else if(val === "10"){
+            multipliers.push("-1");
+        } else{
+            multipliers.push("0");
+        }
+    }
+    return multipliers;
 }
 
 /**
@@ -163,4 +184,8 @@ function twos_complement_tests(){
     console.log('Test 8: ', twos_complement("0000000001") == "1111111111");
 }
 
-pencil_and_paper_tests();
+function convert_multiplier_to_booths_tests(){
+    console.log('Convert Multiplier to Booths Tests')
+    console.log('Test 1: ', convert_multiplier_to_booths("1011"));
+    console.log('Test 2: ', convert_multiplier_to_booths("0111"));
+}
