@@ -1,8 +1,18 @@
 <script>
+  import { 
+    multiplyDisabled, 
+    decMultiplicand, 
+    binMultiplicand, 
+    decMultiplier, 
+    binMultiplier, 
+    solvingMode, 
+    algorithm,
+    answers,
+    stepCounter
+  } from '../lib/store/Store';
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
   import { toBinary, toDecimal } from '../lib/scripts/conversions';
-  import { multiplyDisabled, decMultiplicand, binMultiplicand, decMultiplier, binMultiplier } from '../lib/store/Store';
-  //import { pencil_and_paper } from '../lib/scripts/compute.js';
+  import { pencil_and_paper, booths_algorithm } from '../lib/scripts/compute.js';
 
   /* Housekeeping */
   let decMultiplicandValid = false;
@@ -11,8 +21,10 @@
   let binMultiplierValid = false;
 
   function updateMultiplyDisabled() {
-    const disabled = !( (decMultiplicandValid && decMultiplierValid) || (binMultiplicandValid && binMultiplierValid)
-                          || (decMultiplicandValid && binMultiplierValid) || (binMultiplicandValid && decMultiplierValid) );
+    const disabled = !((decMultiplicandValid && decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm') 
+                        || (binMultiplicandValid && binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
+                        || (decMultiplicandValid && binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
+                        || (binMultiplicandValid && decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm'));
     multiplyDisabled.set(disabled);
   }
                         
@@ -74,13 +86,34 @@
     } else {
       target === 'multiplicand' ? binMultiplicand.set(toBinary(decimal)) : binMultiplier.set(toBinary(decimal))
     }
-
-    //let test = pencil_and_paper($binMultiplicand, $binMultiplier);
-    //console.log(test);
   }
 
   function binaryToDecimal(binary, target) {
       target === 'multiplicand' ? decMultiplicand.set(toDecimal(binary)) : decMultiplier.set(toDecimal(binary))
+  }
+  
+  // TO DO: Change the Store to Hold Every Possible Algorithm
+  function handleMultiply() {
+    stepCounter.set(-1);
+    if ($algorithm === 'Pencil and Paper') {
+      answers.set(pencil_and_paper($binMultiplicand, $binMultiplier));
+    } else if ($algorithm === "Booth's") {
+      answers.set(booths_algorithm($binMultiplicand, $binMultiplier));
+    } else if ($algorithm === "Extended Booth's") {
+      // Add Code Here
+    } else if ($algorithm === "Sequential Circuit") {
+      // Add Code Here
+    }
+  }
+
+  function handleSolvingMode(event) {
+    solvingMode.set(event.target.value);
+    updateMultiplyDisabled();
+  }
+
+  function handleAlgorithm(event) {
+    algorithm.set(event.target.value)
+    updateMultiplyDisabled();
   }
 </script>
 
@@ -107,8 +140,8 @@
 </div>
 
 <div class="flex flex-col w-full sm:flex-row justify-center items-center space-x-0 lg:space-x-4">
-  <div class="pt-5">
-    <select class="select select-ghost w-full max-w-xs select-bordered w-50">
+  <div class="pt-10">
+    <select class="select select-ghost w-full max-w-xs select-bordered w-50" on:change={handleAlgorithm} bind:value={$algorithm}>
       <option disabled selected>Algorithm</option>
       <option>Pencil and Paper</option>
       <option>Booth's</option>
@@ -116,15 +149,15 @@
       <option>Sequential Circuit</option>
     </select>
   </div>
-  <div class="pt-5">
-    <select class="select select-ghost w-full max-w-xs select-bordered">
+  <div class="pt-10">
+    <select class="select select-ghost w-full max-w-xs select-bordered" on:change={handleSolvingMode} bind:value={$solvingMode}>
       <option disabled selected>Solving Mode</option>
       <option>Step by Step</option>
       <option>Show All</option>
     </select> 
   </div>
-  <div class="pt-5">
-    <button class="btn btn-primary" disabled={$multiplyDisabled}>Multiply</button>
+  <div class="pt-10">
+    <button class="btn btn-primary" disabled={$multiplyDisabled} on:click={handleMultiply}>Multiply</button>
   </div>
 </div>
 
