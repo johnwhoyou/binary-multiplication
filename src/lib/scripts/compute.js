@@ -71,6 +71,7 @@ export function pencil_and_paper(multiplicand, multiplier){
         steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
     }
 
+    ans = ans.slice(ans.length - ans_length);
     return {answer: ans, steps: steps}
 }
 /**
@@ -102,6 +103,7 @@ function old_pencil_and_paper(multiplicand, multiplier){
         steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
     }
 
+    ans = ans.slice(ans.length - ans_length);
     return {answer: ans, steps: steps}
 }
 
@@ -135,7 +137,34 @@ function convert_multiplier_to_booths(multiplier){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function booths_algorithm(multiplicand, multiplier){
+    const ans_length = multiplicand.length + multiplier.length;
+    let ans = "";
+    let steps = [];
+    multiplier = convert_multiplier_to_booths(multiplier);
+    for(let i = 0; i < multiplier.length; i++){
+        if(multiplier[i] == "+1"){
+            let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat(multiplier.length - 1 - i);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
+            val = val.slice(0, val.length - (multiplier.length - 1 - i))
+            steps.push({"value": val, "multiplier": "+1"});
+        }else if(multiplier[i] == "-1"){
+            let temp = twos_complement(multiplicand)
+            let val = temp[0].repeat(ans_length - multiplicand.length) + temp + "0".repeat(multiplier.length - 1 - i);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
+            val = val.slice(0, val.length - (multiplier.length - 1 - i))
+            steps.push({"value": val, "multiplier": "-1"});
+        }
+        else{
+            let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
+            ans = binaryAddition(ans, val);
+            steps.push({"value": val, "multiplier": "0"});
+        }
+    }
 
+    ans = ans.slice(ans.length - ans_length);
+    return {answer: ans, steps: steps}
 }
 
 /**
@@ -188,4 +217,10 @@ function convert_multiplier_to_booths_tests(){
     console.log('Convert Multiplier to Booths Tests')
     console.log('Test 1: ', convert_multiplier_to_booths("1011"));
     console.log('Test 2: ', convert_multiplier_to_booths("0111"));
+}
+
+function booths_tests(){
+    console.log('Booth\'s Algorithm Tests')
+    console.log('Test 1: ', booths_algorithm("0100", "1011"));
+    console.log('Test 2: ', booths_algorithm("0100", "0101"));
 }
