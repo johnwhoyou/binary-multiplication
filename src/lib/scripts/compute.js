@@ -45,39 +45,8 @@ function twos_complement(binary){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function pencil_and_paper(multiplicand, multiplier){
-    const ans_length = multiplicand.length + multiplier.length;
-    let ans = "";
-    let steps = [];
-    
-    for(let i = 0; i < multiplier.length; i++){
-        if(multiplier[i] == "1"){
-            let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat(multiplier.length - 1 - i);
-            val = val.slice(val.length - ans_length);
-            ans = binaryAddition(ans, val);
-            val = val.slice(0, val.length - (multiplier.length - 1 - i))
-            steps.push({"value": val, "multiplier": "1"});
-        }else{
-            let val = "0".repeat(ans_length - (multiplier.length - 1 - i));
-            ans = binaryAddition(ans, val);
-            steps.push({"value": val, "multiplier": "0"});
-        }
-    }
-
-    // If negative multiplier, we have to also include a 2's complement version of the multiplicand
-    if(multiplier[0] == "1"){
-        let val = twos_complement(multiplicand) + "0".repeat(multiplier.length);
-        ans = binaryAddition(ans, val);
-        val = val.slice(0, val.length - multiplier.length);
-        steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
-    }
-
-    ans = ans.slice(ans.length - ans_length);
-    return {answer: ans, steps: steps}
-}
-/**
- * Old implementation ng pencil and paper, use this if you want to see the steps in reverse order
- */
-function old_pencil_and_paper(multiplicand, multiplier){
+    multiplicand = multiplicand.length >= multiplier.length ? multiplicand : multiplicand[0].repeat(multiplier.length - multiplicand.length) + multiplicand;
+    multiplier = multiplier.length >= multiplicand.length ? multiplier : multiplier[0].repeat(multiplicand.length - multiplier.length) + multiplier;
     const ans_length = multiplicand.length + multiplier.length;
     let ans = "";
     let steps = [];
@@ -100,7 +69,7 @@ function old_pencil_and_paper(multiplicand, multiplier){
         let val = twos_complement(multiplicand) + "0".repeat(multiplier.length);
         ans = binaryAddition(ans, val);
         val = val.slice(0, val.length - multiplier.length);
-        steps.splice(0, 0, {"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
+        steps.push({"value": val, "multiplier": "2\'s Complement"}); // insert at beginning
     }
 
     ans = ans.slice(ans.length - ans_length);
@@ -137,6 +106,8 @@ function convert_multiplier_to_booths(multiplier){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function booths_algorithm(multiplicand, multiplier){
+    multiplicand = multiplicand.length >= multiplier.length ? multiplicand : multiplicand[0].repeat(multiplier.length - multiplicand.length) + multiplicand;
+    multiplier = multiplier.length >= multiplicand.length ? multiplier : multiplier[0].repeat(multiplicand.length - multiplier.length) + multiplier;
     const ans_length = multiplicand.length + multiplier.length;
     let ans = "";
     let steps = [];
@@ -192,13 +163,12 @@ export function sequential_circuit(multiplicand, multiplier){
 // Test Cases
 function pencil_and_paper_tests(){
     console.log('Pencil and Paper Tests')
-    console.log('Test 1:\n', pencil_and_paper("01010", "0101"), pencil_and_paper("01010", "0101").answer == "000110010");
-    console.log('Test 2:\n', pencil_and_paper("01111", "0111"), pencil_and_paper("01111", "0111").answer == "001101001");
+    console.log('Test 1:\n', pencil_and_paper("01010", "0101"), pencil_and_paper("01010", "0101").answer == "0000110010");
+    console.log('Test 2:\n', pencil_and_paper("01111", "0111"), pencil_and_paper("01111", "0111").answer == "0001101001");
     console.log('Test 3:\n', pencil_and_paper("011", "011"), pencil_and_paper("011", "011").answer == "001001");
     console.log('Test 4:\n', pencil_and_paper("0100", "1011"), pencil_and_paper("0100", "1011").answer == "11101100");
     console.log('Test 5:\n', pencil_and_paper("1100", "1011"), pencil_and_paper("1100", "1011").answer == "00010100");
-    console.log('Beta Test 1:\n', pencil_and_paper("1100", "1011").answer == "00010100");
-    console.log('Beta Test 2:\n', old_pencil_and_paper("1100", "1011").answer == "00010100");
+    console.log('Test 6:\n', pencil_and_paper("010", "01010"), pencil_and_paper("010", "01010").answer == "0000010100")
 }
 
 function twos_complement_tests(){
@@ -221,6 +191,6 @@ function convert_multiplier_to_booths_tests(){
 
 function booths_tests(){
     console.log('Booth\'s Algorithm Tests')
-    console.log('Test 1: ', booths_algorithm("0100", "1011"));
-    console.log('Test 2: ', booths_algorithm("0100", "0101"));
+    console.log('Test 1: ', booths_algorithm("0100", "1011"), booths_algorithm("0100", "1011").answer === "11101100");
+    console.log('Test 2: ', booths_algorithm("0100", "0101"), booths_algorithm("0100", "0101").answer === "00010100");
 }
