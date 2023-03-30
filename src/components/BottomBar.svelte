@@ -44,6 +44,7 @@
             <p class="hidden sm:inline">Reset</p>
         </button>
     </div>
+    {#if $solvingMode === 'Step by Step'}
     <div class="navbar-center">
         <div class="btn-group grid grid-cols-3">
             <button class="btn btn-outline btn-xs sm:btn-sm md:btn-md" on:click={handlePrev}>Previous</button>
@@ -51,6 +52,7 @@
             <button class="btn btn-outline btn-xs sm:btn-sm md:btn-md" on:click={handleNext}>Next</button>
         </div>
     </div>
+    {/if}
     <div class="navbar-end">
         <button class="btn btn-ghost gap-2 btn-xs sm:btn-sm md:btn-md">
             <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" class="h-6 w-6" alt="download" />
