@@ -7,8 +7,11 @@
     binMultiplier, 
     solvingMode, 
     algorithm,
-    answers,
-    stepCounter
+    stepCounter,
+    penPaper,
+    booths,
+    boothsExt,
+    seqCircuit,
   } from '../lib/store/Store';
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
   import { toBinary, toDecimal } from '../lib/scripts/conversions';
@@ -20,6 +23,7 @@
   let binMultiplicandValid = false;
   let binMultiplierValid = false;
 
+  /* Logic to Check if Multiplication is Allowed */
   function updateMultiplyDisabled() {
     const disabled = !((decMultiplicandValid && decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm') 
                         || (binMultiplicandValid && binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
@@ -80,6 +84,7 @@
     updateMultiplyDisabled();
   }
 
+  /* Converts a Decimal to Binary */
   function decimalToBinary(decimal, target) {
     if (decimal === '' || decimal === '+' || decimal === '-') {
       target === 'multiplicand' ? binMultiplicand.set('') : binMultiplier.set('');
@@ -88,30 +93,28 @@
     }
   }
 
+  /* Converts a Binary to Decimal */
   function binaryToDecimal(binary, target) {
       target === 'multiplicand' ? decMultiplicand.set(toDecimal(binary)) : decMultiplier.set(toDecimal(binary))
   }
   
-  // TO DO: Change the Store to Hold Every Possible Algorithm
+  /* Calls the Corresponding Algorithms and Stores the Answer in the Store */
   function handleMultiply() {
     stepCounter.set(-1);
-    if ($algorithm === 'Pencil and Paper') {
-      answers.set(pencil_and_paper($binMultiplicand, $binMultiplier));
-    } else if ($algorithm === "Booth's") {
-      answers.set(booths_algorithm($binMultiplicand, $binMultiplier));
-    } else if ($algorithm === "Extended Booth's") {
-      // Add Code Here
-    } else if ($algorithm === "Sequential Circuit") {
-      // Add Code Here
-    }
+    penPaper.set(pencil_and_paper($binMultiplicand, $binMultiplier));
+    booths.set(booths_algorithm($binMultiplicand, $binMultiplier));
+    boothsExt.set(extended_booths_algorithm($binMultiplicand, $binMultiplier));
+    seqCircuit.set(sequential_circuit($binMultiplicand, $binMultiplier));
   }
 
+  /* Event Handler for Changing Solving Mode Options */
   function handleSolvingMode(event) {
     solvingMode.set(event.target.value);
     stepCounter.set(-1);
     updateMultiplyDisabled();
   }
 
+  /* Event Handler for Changing Algorithm Options */
   function handleAlgorithm(event) {
     algorithm.set(event.target.value)
     updateMultiplyDisabled();
