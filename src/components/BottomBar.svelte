@@ -1,6 +1,9 @@
 <script>
     import { 
-        answers, 
+        penPaper,
+        booths,
+        boothsExt,
+        seqCircuit,
         stepCounter,
         decMultiplicand,
         binMultiplicand,
@@ -11,8 +14,21 @@
         algorithm,
     } from '../lib/store/Store';
 
+    let answersCopy = {};
+    $: {
+        if ($algorithm === 'Pencil and Paper') {
+          answersCopy = $penPaper;
+        } else if ($algorithm === "Booth's") {
+          answersCopy = $booths;
+        } else if ($algorithm === "Extended Booth's") {
+          answersCopy = $boothsExt;
+        } else if ($algorithm === "Sequential Circuit") {
+          answersCopy = $seqCircuit;
+        }
+    }
+
     function handleNext() {
-        if ($stepCounter !== ($answers.steps.length - 1)) {
+        if ($stepCounter !== (answersCopy.steps.length - 1)) {
             stepCounter.set($stepCounter + 1);
         }
     }
@@ -33,7 +49,10 @@
         stepCounter.set(-1);
         solvingMode.set('Solving Mode');
         algorithm.set('Algorithm');
-        answers.set({});
+        penPaper.set({});
+        booths.set({});
+        boothsExt.set({});
+        seqCircuit.set({});
     }
 </script>
 
