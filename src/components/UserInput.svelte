@@ -108,6 +108,7 @@
 
   function handleSolvingMode(event) {
     solvingMode.set(event.target.value);
+    stepCounter.set(-1);
     updateMultiplyDisabled();
   }
 
