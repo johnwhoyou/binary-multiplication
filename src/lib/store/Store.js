@@ -9,4 +9,8 @@ export const multiplyDisabled = writable(true);
 export const stepCounter = writable(-1);
 export const solvingMode = writable('Solving Mode');
 export const algorithm = writable('Algorithm');
-export const answers = writable({});
+
+export const penPaper = writable({});
+export const booths = writable({});
+export const boothsExt = writable({});
+export const seqCircuit = writable({});
