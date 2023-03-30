@@ -1,10 +1,26 @@
 <script>
     // TO DO: For Every Step, If it's already at the bottom, the screen should auto scroll down
-    import { stepCounter, answers, solvingMode } from '../lib/store/Store';
+    import { 
+      stepCounter, 
+      solvingMode,
+      algorithm,
+      penPaper,
+      booths,
+      boothsExt,
+      seqCircuit
+    } from '../lib/store/Store';
     
     let answersCopy = {};
     $: {
-        answersCopy = $answers;
+        if ($algorithm === 'Pencil and Paper') {
+          answersCopy = $penPaper;
+        } else if ($algorithm === "Booth's") {
+          answersCopy = $booths;
+        } else if ($algorithm === "Extended Booth's") {
+          answersCopy = $boothsExt;
+        } else if ($algorithm === "Sequential Circuit") {
+          answersCopy = $seqCircuit;
+        }
     }
 </script>
 
@@ -22,7 +38,8 @@
                   {#if $stepCounter === (answersCopy.steps.length - 1)}
                     <p>Product: {answersCopy.answer}</p>
                   {/if}
-                {:else}
+                {/if}
+                {#if answersCopy.steps && $solvingMode === 'Show All'}
                     <p>Multiplicand: {answersCopy.multiplicand}</p>
                     <p>Multiplier: {answersCopy.multiplier}</p>
                     {#each answersCopy.steps as step}
