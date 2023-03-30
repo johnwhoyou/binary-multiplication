@@ -111,6 +111,7 @@ export function booths_algorithm(multiplicand, multiplier){
     const ans_length = multiplicand.length + multiplier.length;
     let ans = "";
     let steps = [];
+    const old_multiplier = multiplier;
     multiplier = convert_multiplier_to_booths(multiplier);
     for(let i = multiplier.length - 1; i >= 0; i--){
         if(multiplier[i] == "+1"){
@@ -135,7 +136,7 @@ export function booths_algorithm(multiplicand, multiplier){
     }
 
     ans = ans.slice(ans.length - ans_length);
-    return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: multiplier}
+    return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: old_multiplier, booth_multiplier: multiplier}
 }
 
 function convert_mutliplier_to_extended_booth(multiplier){
