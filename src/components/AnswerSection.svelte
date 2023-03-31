@@ -16,6 +16,7 @@
           answersCopy = $penPaper;
         } else if ($algorithm === "Booth's") {
           answersCopy = $booths;
+          console.log(answersCopy)
         } else if ($algorithm === "Extended Booth's") {
           answersCopy = $boothsExt;
         } else if ($algorithm === "Sequential Circuit") {
@@ -32,6 +33,13 @@
                 {#if answersCopy.steps && $solvingMode === 'Step by Step'}
                     <p>Multiplicand: {answersCopy.multiplicand}</p>
                     <p>Multiplier: {answersCopy.multiplier}</p>
+                    {#if answersCopy.booth_multiplier}
+                      <p>Booth's Equivalent:
+                      {#each answersCopy.booth_multiplier as booth}
+                        {booth}
+                      {/each}
+                      </p>
+                    {/if}
                   {#each answersCopy.steps.slice(0, $stepCounter + 1) as step}
                     <p>{step.value}</p>
                   {/each}
@@ -42,6 +50,13 @@
                 {#if answersCopy.steps && $solvingMode === 'Show All'}
                     <p>Multiplicand: {answersCopy.multiplicand}</p>
                     <p>Multiplier: {answersCopy.multiplier}</p>
+                    {#if answersCopy.booth_multiplier}
+                      <p>Booth's Equivalent:
+                      {#each answersCopy.booth_multiplier as booth}
+                        {booth}
+                      {/each}
+                      </p>
+                    {/if}
                     {#each answersCopy.steps as step}
                         <p>{step.value}</p>
                     {/each}
