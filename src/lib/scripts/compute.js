@@ -18,6 +18,25 @@ function binaryAddition(a,b){
     return result
 }
 
+// Binary Addition That Does Not Return Overflow
+function addBinary(a, b) {
+    let result = "";
+    let carry = 0;
+  
+    for (let i = a.length - 1; i >= 0; i--) {
+      let sum = parseInt(a[i], 2) + parseInt(b[i], 2) + carry;
+      result = (sum % 2).toString() + result;
+      carry = Math.floor(sum / 2);
+    }
+  
+    // Discard the overflow if any
+    if (result.length > a.length) {
+      result = result.substring(1);
+    }
+  
+    return result;
+  }  
+
 function twos_complement(binary){
     let complement = "";
     let one_found = false;
@@ -163,7 +182,50 @@ export function extended_booths_algorithm(multiplicand, multiplier){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function sequential_circuit(multiplicand, multiplier){
+    // Equalize the length of the multiplicand and multiplier
+    //multiplicand = multiplicand.length >= multiplier.length ? multiplicand : multiplicand[0].repeat(multiplier.length - multiplicand.length) + multiplicand;
+    //multiplier = multiplier.length >= multiplicand.length ? multiplier : multiplier[0].repeat(multiplicand.length - multiplier.length) + multiplier;
 
+    // Initialize
+    let varA = "0".repeat(multiplicand.length);
+    let varM = multiplicand; // For A+M Case
+    let varNegM = twos_complement(multiplicand); // For A-M Case
+    let varQ = multiplier;
+    let varQneg1 = "0";
+    let results = "";
+    let steps = [];
+
+    // To Determine if A+M or A-M or Copy
+    function determineOperation() {
+        let varQ0Qneg1 = varQ.charAt(varQ.length - 1) + varQneg1;
+        if (varQ0Qneg1 === '01') {
+            return "A+M";
+        } else if (varQ0Qneg1 === '10') {
+            return "A-M";
+        }
+        return;
+    }
+
+    for (let i = 0; i < multiplier.length; i++) {
+        if (determineOperation() === 'A+M') {
+            varA = addBinary(varA, varM)
+        } else if (determineOperation() === 'A-M') {
+            varA = addBinary(varA, varNegM)
+        }
+
+        let combined = varA + varQ + varQneg1;
+        let shifted = combined.charAt(0) + combined.slice(0,-1);
+        varA = shifted.slice(0, varA.length);
+        varQ = shifted.slice(varA.length, varA.length + varQ.length);
+        varQneg1 = shifted.slice(varA.length + varQ.length);
+        steps.push({"Loop": i+1, "A": varA, "Q": varQ, "Q-1": varQneg1});
+        
+        if (i === multiplier.length - 1) {
+            results = varA + varQ;
+        }
+    }
+
+    return {"multiplicand": multiplicand, "multiplier": multiplier, "answer": results, "steps": steps}
 }
 
 // Test Cases
@@ -205,3 +267,14 @@ function extended_booths_tests(){
     console.log('Extended Booth\'s Algorithm Tests')
     console.log('Test 1: ', extended_booths_algorithm("01101", "00110"), extended_booths_algorithm("01101", "00110").answer = "0001001110");
 }
+
+function sequential_circuit_tests(){
+    console.log('Sequential Circuit Tests');
+    console.log('Test 1: ', sequential_circuit("0100", "0101").answer === '00010100' ? 'Passed' : 'Failed');
+    console.log('Test 2: ', sequential_circuit("0111111111111111", "1000000000000000").answer === '11000000000000001000000000000000' ? 'Passed' : 'Failed');
+    console.log('Test 3: ', sequential_circuit("0101101", "1001").answer === '11011000101' ? 'Passed' : 'Failed');
+    console.log('Test 4: ', sequential_circuit("010111101", "101110").answer === '111001010110110' ? 'Passed' : 'Failed');
+    console.log('Test 5: ', sequential_circuit("0000000000000001", "1111111111111111").answer === '11111111111111111111111111111111' ? 'Passed' : 'Failed');
+}
+
+//sequential_circuit_tests();
