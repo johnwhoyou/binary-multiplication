@@ -194,6 +194,13 @@ export function sequential_circuit(multiplicand, multiplier){
     let varQneg1 = "0";
     let results = "";
     let steps = [];
+    let initial = {
+        'A': varA,
+        'M': varM,
+        '-M': varNegM,
+        'Q': varQ,
+        'Q-1': varQneg1,
+    }
 
     // To Determine if A+M or A-M or Copy
     function determineOperation() {
@@ -225,7 +232,7 @@ export function sequential_circuit(multiplicand, multiplier){
         }
     }
 
-    return {"multiplicand": multiplicand, "multiplier": multiplier, "answer": results, "steps": steps}
+    return {"multiplicand": multiplicand, "multiplier": multiplier, "answer": results, "initial": initial, "steps": steps}
 }
 
 // Test Cases

@@ -15,7 +15,7 @@
   } from '../lib/store/Store';
   import { isValidBin, isValidDec } from "../lib/scripts/inputUtils";
   import { toBinary, toDecimal } from '../lib/scripts/conversions';
-  import { pencil_and_paper, booths_algorithm } from '../lib/scripts/compute.js';
+  import { pencil_and_paper, booths_algorithm, extended_booths_algorithm, sequential_circuit } from '../lib/scripts/compute.js';
 
   /* Housekeeping */
   let decMultiplicandValid = false;
