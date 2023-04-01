@@ -231,12 +231,12 @@ export function sequential_circuit(multiplicand, multiplier){
 // Test Cases
 function pencil_and_paper_tests(){
     console.log('Pencil and Paper Tests')
-    console.log('Test 1:\n', pencil_and_paper("01010", "0101"), pencil_and_paper("01010", "0101").answer == "0000110010");
-    console.log('Test 2:\n', pencil_and_paper("01111", "0111"), pencil_and_paper("01111", "0111").answer == "0001101001");
-    console.log('Test 3:\n', pencil_and_paper("011", "011"), pencil_and_paper("011", "011").answer == "001001");
-    console.log('Test 4:\n', pencil_and_paper("0100", "1011"), pencil_and_paper("0100", "1011").answer == "11101100");
-    console.log('Test 5:\n', pencil_and_paper("1100", "1011"), pencil_and_paper("1100", "1011").answer == "00010100");
-    console.log('Test 6:\n', pencil_and_paper("010", "01010"), pencil_and_paper("010", "01010").answer == "0000010100")
+    console.log('Test 1: ', pencil_and_paper("01010", "0101").answer == "0000110010" ? 'Passed' : 'Failed');
+    console.log('Test 2: ', pencil_and_paper("01111", "0111").answer == "0001101001" ? 'Passed' : 'Failed');
+    console.log('Test 3: ', pencil_and_paper("011", "011").answer == "001001" ? 'Passed' : 'Failed');
+    console.log('Test 4: ', pencil_and_paper("0100", "1011").answer == "11101100" ? 'Passed' : 'Failed');
+    console.log('Test 5: ', pencil_and_paper("1100", "1011").answer == "00010100" ? 'Passed' : 'Failed');
+    console.log('Test 6: ', pencil_and_paper("010", "01010").answer == "0000010100" ? 'Passed' : 'Failed')
 }
 
 function twos_complement_tests(){
@@ -258,18 +258,18 @@ function convert_multiplier_to_booths_tests(){
 }
 
 function booths_tests(){
-    console.log('Booth\'s Algorithm Tests')
-    console.log('Test 1: ', booths_algorithm("0100", "1011"), booths_algorithm("0100", "1011").answer === "11101100");
-    console.log('Test 2: ', booths_algorithm("0100", "0101"), booths_algorithm("0100", "0101").answer === "00010100");
+    console.log('\nBooth\'s Algorithm Tests')
+    console.log('Test 1: ', booths_algorithm("0100", "1011").answer === "11101100" ? 'Passed' : 'Failed');
+    console.log('Test 2: ', booths_algorithm("0100", "0101").answer === "00010100" ? 'Passed' : 'Failed');
 }
 
 function extended_booths_tests(){
-    console.log('Extended Booth\'s Algorithm Tests')
-    console.log('Test 1: ', extended_booths_algorithm("01101", "00110"), extended_booths_algorithm("01101", "00110").answer = "0001001110");
+    console.log('\nExtended Booth\'s Algorithm Tests')
+    console.log('Test 1: ', extended_booths_algorithm("01101", "00110").answer = "0001001110" ? 'Passed' : 'Failed');
 }
 
 function sequential_circuit_tests(){
-    console.log('Sequential Circuit Tests');
+    console.log('\nSequential Circuit Tests');
     console.log('Test 1: ', sequential_circuit("0100", "0101").answer === '00010100' ? 'Passed' : 'Failed');
     console.log('Test 2: ', sequential_circuit("0111111111111111", "1000000000000000").answer === '11000000000000001000000000000000' ? 'Passed' : 'Failed');
     console.log('Test 3: ', sequential_circuit("0101101", "1001").answer === '11011000101' ? 'Passed' : 'Failed');
@@ -277,4 +277,7 @@ function sequential_circuit_tests(){
     console.log('Test 5: ', sequential_circuit("0000000000000001", "1111111111111111").answer === '11111111111111111111111111111111' ? 'Passed' : 'Failed');
 }
 
+//pencil_and_paper_tests();
+//booths_tests();
+//extended_booths_tests();
 //sequential_circuit_tests();
