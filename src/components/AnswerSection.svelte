@@ -40,9 +40,19 @@
                       {/each}
                       </p>
                     {/if}
-                  {#each answersCopy.steps.slice(0, $stepCounter + 1) as step}
-                    <p>{step.value}</p>
-                  {/each}
+                    {#if $algorithm === 'Sequential Circuit'}
+                      <p>Initial
+                        <br>A: {answersCopy.initial.A} M: {answersCopy.initial.M} -M: {answersCopy.initial['-M']}
+                        <br>Q: {answersCopy.initial.Q} Q-1: {answersCopy.initial['Q-1']}
+                      </p>
+                      {#each answersCopy.steps.slice(0, $stepCounter + 1) as step}
+                        <p>Loop: {step.Loop} <br>A: {step.A} Q: {step.Q} Q-1: {step['Q-1']}</p>
+                      {/each}
+                    {:else}
+                      {#each answersCopy.steps.slice(0, $stepCounter + 1) as step}
+                        <p>{step.value}</p>
+                      {/each}
+                    {/if}
                   {#if $stepCounter === (answersCopy.steps.length - 1)}
                     <p>Product: {answersCopy.answer}</p>
                   {/if}
@@ -57,9 +67,19 @@
                       {/each}
                       </p>
                     {/if}
-                    {#each answersCopy.steps as step}
+                    {#if $algorithm === 'Sequential Circuit'}
+                      <p>Initial
+                        <br>A: {answersCopy.initial.A} M: {answersCopy.initial.M} -M: {answersCopy.initial['-M']}
+                        <br>Q: {answersCopy.initial.Q} Q-1: {answersCopy.initial['Q-1']}
+                      </p>
+                      {#each answersCopy.steps as step}
+                        <p>Loop: {step.Loop} <br>A: {step.A} Q: {step.Q} Q-1: {step['Q-1']}</p>
+                      {/each}
+                    {:else}
+                      {#each answersCopy.steps as step}
                         <p>{step.value}</p>
-                    {/each}
+                      {/each}
+                    {/if}
                     <p>Product: {answersCopy.answer}</p>
                 {/if}
             </div>
