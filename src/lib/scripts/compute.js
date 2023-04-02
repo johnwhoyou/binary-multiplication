@@ -158,9 +158,21 @@ export function booths_algorithm(multiplicand, multiplier){
     return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: old_multiplier, booth_multiplier: multiplier}
 }
 
-function convert_mutliplier_to_extended_booth(multiplier){
+function convert_multiplier_to_extended_booths(multiplier){
     const lookup = {'000': '0', '001': '+1', '010': '+1', '011': '+2', '100': '-2', '101': '-1', '110': '-1', '111': '0'};
+    const multipliers = [];
 
+    // If odd number of bits, sign extend
+    multiplier = multiplier.length % 2 ? multiplier[0] + multiplier : multiplier;
+    // Append 0 to LSb side
+    multiplier = multiplier + "0";
+
+    for(let i = 0; i < multiplier.length - 1; i += 2){
+        let val = multiplier[i] + multiplier[i+1] + multiplier[i+2];
+        multipliers.push(lookup[val]);
+    }
+
+    return multipliers;
 }
 
 /**
@@ -171,7 +183,50 @@ function convert_mutliplier_to_extended_booth(multiplier){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function extended_booths_algorithm(multiplicand, multiplier){
+    const ans_length = multiplicand.length + multiplier.length;
+    let ans = "";
+    let steps = [];
+    const old_multiplier = multiplier;
+    multiplier = convert_multiplier_to_extended_booths(multiplier);
 
+    for(let i = multiplier.length - 1; i >= 0; i--){
+        if(multiplier[i] == "+1"){
+            let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat((multiplier.length - 1 - i) * 2);
+            
+            steps.push({"value": val, "multiplied_to": "+1"});
+        }
+        else if(multiplier[i] == "-1"){
+            let temp = twos_complement(multiplicand)
+            let val = temp[0].repeat(ans_length - multiplicand.length) + temp + "0".repeat((multiplier.length - 1 - i) * 2);
+
+            steps.push({"value": val, "multiplied_to": "-1"});
+        }
+        else if(multiplier[i] == "+2"){
+            let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat(1 + (multiplier.length - 1 - i) * 2);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
+
+            val = val.slice(0, val.length - ( (multiplier.length - i - 1) * 2 ) );
+            steps.push({"value": val, "multiplied_to": "+2"});
+        }
+        else if(multiplier[i] == "-2"){
+            let temp = twos_complement(multiplicand)
+            let val = temp[0].repeat(ans_length - multiplicand.length) + temp + "0".repeat(1 + (multiplier.length - 1 - i) * 2);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
+
+            val = val.slice(0, val.length - ( (multiplier.length - i - 1) * 2 ) );
+            steps.push({"value": val, "multiplied_to": "-2"});
+        }
+        else{
+            let val = "0".repeat(ans_length - ((multiplier.length - i - 1) * 2));
+            ans = binaryAddition(ans, val);
+            steps.push({"value": val, "multiplied_to": "0"});
+        }
+    }
+
+    ans = ans.slice(ans.length - ans_length)
+    return {answer: ans, steps: steps, multiplicand: multiplicand, multiplier: old_multiplier, booth_multiplier: multiplier};
 }
 
 /**
@@ -270,9 +325,18 @@ function booths_tests(){
     console.log('Test 2: ', booths_algorithm("0100", "0101").answer === "00010100" ? 'Passed' : 'Failed');
 }
 
+function convert_multiplier_to_extended_booth_tests(){
+    console.log('Convert Multiplier to Extended Booth Tests')
+    console.log('Test 1: ', convert_multiplier_to_extended_booths("00110"));
+    console.log('Test 2: ', convert_multiplier_to_extended_booths("0101"));
+    console.log('Test 3: ', convert_multiplier_to_extended_booths("10101"));
+    console.log('Test 4: ', convert_multiplier_to_extended_booths("10110"));
+    console.log('Test 5: ', convert_multiplier_to_extended_booths("10001"));
+}
+
 function extended_booths_tests(){
     console.log('\nExtended Booth\'s Algorithm Tests')
-    console.log('Test 1: ', extended_booths_algorithm("01101", "00110").answer = "0001001110" ? 'Passed' : 'Failed');
+    console.log('Test 1: ', extended_booths_algorithm("01101", "00110").answer === "0001001110" ? 'Passed' : 'Failed');
 }
 
 function sequential_circuit_tests(){
