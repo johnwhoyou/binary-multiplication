@@ -1,5 +1,10 @@
 import { writable } from 'svelte/store';
 
+
+export const decMultiplicandValid = writable(false);
+export const decMultiplierValid = writable(false);
+export const binMultiplicandValid = writable(false);
+export const binMultiplierValid = writable(false);
 export const decMultiplicand = writable('');
 export const binMultiplicand = writable('');
 export const decMultiplier = writable('');
