@@ -10,6 +10,10 @@
         decMultiplier,
         binMultiplier,
         multiplyDisabled,
+        decMultiplicandValid,
+        decMultiplierValid,
+        binMultiplicandValid,
+        binMultiplierValid,
         solvingMode,
         algorithm,
     } from '../lib/store/Store';
@@ -41,6 +45,10 @@
 
     function handleReset() {
         stepCounter.set(-1);
+        decMultiplicandValid.set(false);
+        decMultiplierValid.set(false);
+        binMultiplicandValid.set(false);
+        binMultiplierValid.set(false);
         decMultiplicand.set('');
         binMultiplicand.set('');
         decMultiplier.set('');
