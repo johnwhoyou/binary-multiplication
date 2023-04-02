@@ -17,6 +17,7 @@
         solvingMode,
         algorithm,
     } from '../lib/store/Store';
+    import { generateTextContent } from '../lib/scripts/downloadUtils';
 
     let answersCopy = {};
     $: {
@@ -62,6 +63,19 @@
         boothsExt.set({});
         seqCircuit.set({});
     }
+
+    function handleDownload() {
+        const fileContent = generateTextContent(answersCopy, $algorithm);
+        const blob = new Blob([fileContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'binary-multiplication-answers.txt';
+        link.click();
+
+        // Clean up the URL object after download
+        URL.revokeObjectURL(url);
+    }
 </script>
 
 <div class="navbar bg-base-300 fixed bottom-0 w-full z-10">
@@ -81,7 +95,7 @@
     </div>
     {/if}
     <div class="navbar-end">
-        <button class="btn btn-ghost gap-2 btn-xs sm:btn-sm md:btn-md">
+        <button class="btn btn-ghost gap-2 btn-xs sm:btn-sm md:btn-md" on:click={handleDownload}>
             <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" class="h-6 w-6" alt="download" />
             <p class="hidden sm:inline">Download</p>
         </button>   
