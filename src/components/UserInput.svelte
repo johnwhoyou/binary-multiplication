@@ -1,5 +1,9 @@
 <script>
-  import { 
+  import {
+    decMultiplicandValid,
+    decMultiplierValid,
+    binMultiplicandValid,
+    binMultiplierValid,
     multiplyDisabled, 
     decMultiplicand, 
     binMultiplicand, 
@@ -17,18 +21,12 @@
   import { toBinary, toDecimal } from '../lib/scripts/conversions';
   import { pencil_and_paper, booths_algorithm, extended_booths_algorithm, sequential_circuit } from '../lib/scripts/compute.js';
 
-  /* Housekeeping */
-  let decMultiplicandValid = false;
-  let decMultiplierValid = false;
-  let binMultiplicandValid = false;
-  let binMultiplierValid = false;
-
   /* Logic to Check if Multiplication is Allowed */
   function updateMultiplyDisabled() {
-    const disabled = !((decMultiplicandValid && decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm') 
-                        || (binMultiplicandValid && binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
-                        || (decMultiplicandValid && binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
-                        || (binMultiplicandValid && decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm'));
+    const disabled = !(($decMultiplicandValid && $decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm') 
+                        || ($binMultiplicandValid && $binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
+                        || ($decMultiplicandValid && $binMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm')
+                        || ($binMultiplicandValid && $decMultiplierValid && $solvingMode !== 'Solving Mode' && $algorithm !== 'Algorithm'));
     multiplyDisabled.set(disabled);
   }
                         
@@ -38,19 +36,19 @@
     if (value === true) {
       if (target === 'multiplicand') {
         decMultiplicand.set(decimal);
-        decMultiplicandValid = true;
+        decMultiplicandValid.set(true);
       } else {
         decMultiplier.set(decimal);
-        decMultiplierValid = true;
+        decMultiplierValid.set(true);
       }
       decimalToBinary(decimal, target);
     } else if (value === false) {
         if (target === 'multiplicand') {
           binMultiplicand.set('');
-          decMultiplicandValid = false;
+          decMultiplicandValid.set(false);
         } else {
           binMultiplier.set('');
-          decMultiplierValid = false;
+          decMultiplierValid.set(false);
         }
     } else {
       validateDec(value, target);
@@ -64,19 +62,19 @@
     if (value === true) {
       if (target === 'multiplicand') {
         binMultiplicand.set(binary);
-        binMultiplicandValid = true;
+        binMultiplicandValid.set(true);
       } else {
         binMultiplier.set(binary);
-        binMultiplierValid = true;
+        binMultiplierValid.set(true);
       }
       binaryToDecimal(binary,target);
     } else if (value === false) {
         if (target === 'multiplicand') {
           decMultiplicand.set('');
-          binMultiplicandValid = false;
+          binMultiplicandValid.set(false);
         } else {
           decMultiplier.set('');
-          binMultiplierValid = false;
+          binMultiplierValid.set(false);
         }
     } else {
       validateBin(value, target);
