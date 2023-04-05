@@ -65,7 +65,7 @@
     }
 
     function handleDownload() {
-        const fileContent = generateTextContent(answersCopy, $algorithm);
+        const fileContent = generateTextContent(answersCopy, $algorithm, $decMultiplicand, $decMultiplier);
         const blob = new Blob([fileContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');

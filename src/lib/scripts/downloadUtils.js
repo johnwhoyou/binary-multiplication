@@ -1,4 +1,4 @@
-export function generateTextContent(answers, algorithm) {
+export function generateTextContent(answers, algorithm, decMultiplicand, decMultiplier) {
     let content = '';
 
     if (algorithm === "Pencil and Paper") {
@@ -12,11 +12,11 @@ export function generateTextContent(answers, algorithm) {
     }
 
     content += `Multiplicand\n`;
-    content += `\tDecimal:\n`;
-    content += `\tBinary: ${answers.multiplicand}\n\n`;
+    content += `\tDecimal:\t${decMultiplicand}\n`;
+    content += `\tBinary:\t${answers.multiplicand}\n\n`;
     content += `Multiplier\n`;
-    content += `\tDecimal:\n`;
-    content += `\tBinary: ${answers.multiplier}\n\n`;
+    content += `\tDecimal:\t${decMultiplier}\n`;
+    content += `\tBinary:\t${answers.multiplier}\n\n`;
 
     content += `----------------------------------------------------------------\n\n`;
    
@@ -26,7 +26,11 @@ export function generateTextContent(answers, algorithm) {
 
     content += ` x\t`;
     content += " ".repeat(answers.steps.length)
-    content += `${answers.multiplier}\n`;
+    if (algorithm === 'Pencil and Paper') {
+        content += `${answers.multiplier}\n`;
+    } else if (algorithm === "Booth's") {
+        content += `${answers.booth_multiplier.join(' ')}\n`;
+    }
 
     content += `----------------------------------------\n`;
 
