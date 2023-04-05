@@ -82,7 +82,11 @@
     <div class="navbar-start">
         <button class="btn btn-ghost gap-2 btn-xs sm:btn-sm md:btn-md" on:click={handleReset}>
             <img src="https://cdn-icons-png.flaticon.com/512/54/54529.png" class="h-6 w-6" alt="download" />
+            {#if $solvingMode === 'Step by Step'}
             <p class="hidden sm:inline">Reset</p>
+                {:else}
+                <p>Reset</p>
+            {/if}
         </button>
     </div>
     {#if $solvingMode === 'Step by Step'}
@@ -97,7 +101,11 @@
     <div class="navbar-end">
         <button class="btn btn-ghost gap-2 btn-xs sm:btn-sm md:btn-md" on:click={handleDownload}>
             <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png" class="h-6 w-6" alt="download" />
+            {#if $solvingMode === 'Step by Step'}
             <p class="hidden sm:inline">Download</p>
+                {:else}
+                <p>Download</p>
+            {/if}
         </button>   
     </div>
 </div>
