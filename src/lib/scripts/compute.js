@@ -22,20 +22,20 @@ function binaryAddition(a,b){
 function addBinary(a, b) {
     let result = "";
     let carry = 0;
-  
+
     for (let i = a.length - 1; i >= 0; i--) {
-      let sum = parseInt(a[i], 2) + parseInt(b[i], 2) + carry;
-      result = (sum % 2).toString() + result;
-      carry = Math.floor(sum / 2);
+        let sum = parseInt(a[i], 2) + parseInt(b[i], 2) + carry;
+        result = (sum % 2).toString() + result;
+        carry = Math.floor(sum / 2);
     }
-  
+
     // Discard the overflow if any
     if (result.length > a.length) {
-      result = result.substring(1);
+        result = result.substring(1);
     }
-  
+
     return result;
-  }  
+}  
 
 function twos_complement(binary){
     let complement = "";

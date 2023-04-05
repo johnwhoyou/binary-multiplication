@@ -25,6 +25,7 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.51.5",
+		"mathjax": "^3.2.2",
 		"simple-base-converter": "^1.0.18"
 	}
 }
