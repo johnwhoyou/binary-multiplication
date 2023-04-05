@@ -159,6 +159,22 @@
 		algorithm.set(event.target.value);
 		updateMultiplyDisabled();
 	}
+
+	function restrictDecimalInput(event) {
+		const key = event.key;
+		const regex = /^[\d+-]$/;
+		if (!regex.test(key)) {
+			event.preventDefault();
+		}
+	}
+
+	function restrictBinaryInput(event) {
+		const key = event.key;
+		const regex = /^[01]$/;
+		if (!regex.test(key)) {
+			event.preventDefault();
+		}
+	}
 </script>
 
 <div class="flex w-full flex-col items-center justify-center space-x-0 sm:flex-row lg:space-x-4">
@@ -176,6 +192,7 @@
 					validateDec($decMultiplicand, 'multiplicand');
 					handleEmptyInputs('multiplicand');
 				}}
+        on:keypress={restrictDecimalInput}
 			/>
 			<input
 				type="text"
@@ -186,6 +203,7 @@
 					validateBin($binMultiplicand, 'multiplicand');
 					handleEmptyInputs('multiplicand');
 				}}
+        on:keypress={restrictBinaryInput}
 			/>
 		</div>
 	</div>
@@ -204,6 +222,7 @@
 					validateDec($decMultiplier, 'multiplier');
 					handleEmptyInputs('multiplier');
 				}}
+        on:keypress={restrictDecimalInput}
 			/>
 			<input
 				type="text"
@@ -214,6 +233,7 @@
 					validateBin($binMultiplier, 'multiplier');
 					handleEmptyInputs('multiplier');
 				}}
+        on:keypress={restrictBinaryInput}
 			/>
 		</div>
 	</div>
