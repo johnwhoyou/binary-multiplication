@@ -29,7 +29,7 @@
 					: (latexBody += `+\\space&${step.value}\\\\`);
 			});
 
-			if (solvingMode === 'Show All' || stepCounter === steps.length - 1)
+			if (solvingMode === 'Show All' || stepCounter >= steps.length - 1)
 				latexBody += `\\hline=\\space&${answer}&&\\text{Product}`;
 		} else if (algorithm === "Booth's" || algorithm === "Extended Booth's") {
 			let boothMultiplierToLatex = '';
@@ -51,7 +51,7 @@
 					: (latexBody += `+\\space&${step.value}\\\\`);
 			});
 
-			if (solvingMode === 'Show All' || stepCounter === steps.length - 1)
+			if (solvingMode === 'Show All' || stepCounter >= steps.length - 1)
 				latexBody += `\\hline=\\space&${answer}&&\\text{Product}`;
 		} else {
 			latexBody += `&\\text{Multiplicand:}\\space${multiplicand}\\\\
@@ -74,7 +74,7 @@
                 Q_{-1}:\\boxed{${step['Q-1']}}\\\\`;
 			});
 
-			if (solvingMode === 'Show All' || stepCounter === steps.length - 1)
+			if (solvingMode === 'Show All' || stepCounter >= steps.length - 1)
 				latexBody += `\\\\ \\hline \\\\
                 \\mathbf{Product:}\\\\ &AQ=${answer}`;
 		}
