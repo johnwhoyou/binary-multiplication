@@ -183,6 +183,8 @@ function convert_multiplier_to_extended_booths(multiplier){
  * @returns {Object} with params answer in binary, steps in array of strings
  */
 export function extended_booths_algorithm(multiplicand, multiplier){
+    multiplicand = multiplicand.length >= multiplier.length ? multiplicand : multiplicand[0].repeat(multiplier.length - multiplicand.length) + multiplicand;
+    multiplier = multiplier.length >= multiplicand.length ? multiplier : multiplier[0].repeat(multiplicand.length - multiplier.length) + multiplier;
     const ans_length = multiplicand.length + multiplier.length;
     let ans = "";
     let steps = [];
@@ -192,13 +194,19 @@ export function extended_booths_algorithm(multiplicand, multiplier){
     for(let i = multiplier.length - 1; i >= 0; i--){
         if(multiplier[i] == "+1"){
             let val = multiplicand[0].repeat(ans_length - multiplicand.length) + multiplicand + "0".repeat((multiplier.length - 1 - i) * 2);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
             
+            val = val.slice(0, val.length - ( (multiplier.length - i - 1) * 2 ) );
             steps.push({"value": val, "multiplied_to": "+1"});
         }
         else if(multiplier[i] == "-1"){
             let temp = twos_complement(multiplicand)
             let val = temp[0].repeat(ans_length - multiplicand.length) + temp + "0".repeat((multiplier.length - 1 - i) * 2);
+            val = val.slice(val.length - ans_length);
+            ans = binaryAddition(ans, val);
 
+            val = val = val.slice(0, val.length - ( (multiplier.length - i - 1) * 2 ) );
             steps.push({"value": val, "multiplied_to": "-1"});
         }
         else if(multiplier[i] == "+2"){
