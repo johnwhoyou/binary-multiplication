@@ -337,6 +337,8 @@ function convert_multiplier_to_extended_booth_tests(){
 function extended_booths_tests(){
     console.log('\nExtended Booth\'s Algorithm Tests')
     console.log('Test 1: ', extended_booths_algorithm("01101", "00110").answer === "0001001110" ? 'Passed' : 'Failed');
+    console.log('Test 2: ', extended_booths_algorithm("0111100111", "01111011").answer === "00001110100111111101" ? 'Passed' : 'Failed');
+    console.log('Test 3: ', extended_booths_algorithm("11000", "10111110111").answer === "0000000001000001001000" ? 'Passed' : 'Failed');
 }
 
 function sequential_circuit_tests(){
