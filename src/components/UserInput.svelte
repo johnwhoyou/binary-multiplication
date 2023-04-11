@@ -156,6 +156,7 @@
 
 	/* Event Handler for Changing Algorithm Options */
 	function handleAlgorithm(event) {
+		stepCounter.set(-1);
 		algorithm.set(event.target.value);
 		updateMultiplyDisabled();
 	}
