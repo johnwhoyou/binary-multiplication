@@ -35,14 +35,12 @@
     function handleNext() {
         if ($stepCounter !== (answersCopy.steps.length - 1)) {
             stepCounter.set($stepCounter + 1);
-            window.scrollTo(0, document.body.scrollHeight)
         }
     }
 
     function handlePrev() {
         if ($stepCounter !== -1){
             stepCounter.set($stepCounter - 1);
-            window.scrollTo(0, document.body.scrollHeight)
         }
     }
 
