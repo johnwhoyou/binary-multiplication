@@ -22,25 +22,27 @@
     let answersCopy = {};
     $: {
         if ($algorithm === 'Pencil and Paper') {
-          answersCopy = $penPaper;
+            answersCopy = $penPaper;
         } else if ($algorithm === "Booth's") {
-          answersCopy = $booths;
+            answersCopy = $booths;
         } else if ($algorithm === "Extended Booth's") {
-          answersCopy = $boothsExt;
+            answersCopy = $boothsExt;
         } else if ($algorithm === "Sequential Circuit") {
-          answersCopy = $seqCircuit;
+            answersCopy = $seqCircuit;
         }
     }
 
     function handleNext() {
         if ($stepCounter !== (answersCopy.steps.length - 1)) {
             stepCounter.set($stepCounter + 1);
+            window.scrollTo(0, document.body.scrollHeight)
         }
     }
 
     function handlePrev() {
         if ($stepCounter !== -1){
             stepCounter.set($stepCounter - 1);
+            window.scrollTo(0, document.body.scrollHeight)
         }
     }
 
