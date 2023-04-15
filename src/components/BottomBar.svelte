@@ -22,13 +22,13 @@
     let answersCopy = {};
     $: {
         if ($algorithm === 'Pencil and Paper') {
-          answersCopy = $penPaper;
+            answersCopy = $penPaper;
         } else if ($algorithm === "Booth's") {
-          answersCopy = $booths;
+            answersCopy = $booths;
         } else if ($algorithm === "Extended Booth's") {
-          answersCopy = $boothsExt;
+            answersCopy = $boothsExt;
         } else if ($algorithm === "Sequential Circuit") {
-          answersCopy = $seqCircuit;
+            answersCopy = $seqCircuit;
         }
     }
 
