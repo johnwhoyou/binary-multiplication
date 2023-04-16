@@ -37,13 +37,16 @@
             stepCounter.set($stepCounter + 1);
             setTimeout(() => {
                 window.scrollTo(0, document.body.scrollHeight);
-            }, 300);
+            }, 250);
         }
     }
 
     function handlePrev() {
         if ($stepCounter !== -1){
             stepCounter.set($stepCounter - 1);
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 250);
         }
     }
 
