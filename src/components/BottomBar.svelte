@@ -35,6 +35,9 @@
     function handleNext() {
         if ($stepCounter !== (answersCopy.steps.length - 1)) {
             stepCounter.set($stepCounter + 1);
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 300);
         }
     }
 
